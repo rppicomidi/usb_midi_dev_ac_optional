@@ -47,6 +47,9 @@ usbd_class_driver_t const* usbd_app_driver_get_cb(uint8_t* driver_count)
 {
   static usbd_class_driver_t app_driver =
   {
+    #if CFG_TUSB_DEBUG >= CFG_TUD_LOG_LEVEL
+      .name="MIDID",
+    #endif
     .init = midid_init,
     .reset = midid_reset,
     .open = midid_open,
