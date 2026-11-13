@@ -372,6 +372,21 @@ uint32_t tud_midi_n_stream_write(uint8_t itf, uint8_t cable_num, uint8_t const* 
   return i;
 }
 
+// This function is not part of the standard midi_device.h include file.
+// If you want to use it, include it as an external function declaration in
+// a new header file or in the source file that uses it.
+//
+// This function may be useful if a packet write fails because a task can call
+// tud_task() repeatedly until this function until it returns true; at that
+// point, a packet write should succeed.
+bool tud_midi_n_can_write_packet(uint8_t itf)
+{
+  midid_interface_t* midi = &_midid_itf[itf];
+  TU_VERIFY(midi->ep_in);
+
+  return tu_fifo_remaining(&midi->tx_ff) >= 4;
+}
+
 bool tud_midi_n_packet_write (uint8_t itf, uint8_t const packet[4])
 {
   midid_interface_t* midi = &_midid_itf[itf];
